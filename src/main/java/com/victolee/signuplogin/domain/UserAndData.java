@@ -1,6 +1,7 @@
 package com.victolee.signuplogin.domain;
 
 import com.victolee.signuplogin.domain.entity.DataEntity;
+import com.victolee.signuplogin.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

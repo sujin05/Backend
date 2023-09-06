@@ -1,7 +1,6 @@
 package com.victolee.signuplogin.controller;
 import com.victolee.signuplogin.JwT.JwtTokenProvider;
-import com.victolee.signuplogin.domain.User;
-import com.victolee.signuplogin.domain.UserAndData;
+import com.victolee.signuplogin.domain.entity.User;
 import com.victolee.signuplogin.domain.entity.DataEntity;
 import com.victolee.signuplogin.domain.repository.DataRepository;
 import com.victolee.signuplogin.domain.repository.UserRepository;
@@ -13,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -26,23 +26,7 @@ public class UserController {
     private final DataService dataService;
     private final MemberService memberService;
 
-    // 회원가입
-//    @PostMapping("/join")
-//    public Long join(@RequestBody Map<String, String> user) {
-//        if (memberService.isEmailAlreadyExists(user.get("email"))) {
-//            String message = "이미 사용 중인 이메일입니다.";
-//            long response = Long.parseLong(message);
-//            HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-//            return response;
-//            //return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-//        }
-//        return userRepository.save(User.builder()
-//                .email(user.get("email"))
-//                .password(passwordEncoder.encode(user.get("password")))
-//                .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
-//                .build()).getId();
-//    }
-    @CrossOrigin(origins = "http://172.20.10.7:*")
+    @CrossOrigin(origins = "*")
 
     //회원가입
     @PostMapping("/join")
@@ -51,14 +35,22 @@ public class UserController {
             String message = "이미 사용 중인 이메일입니다.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }
-        userRepository.save(User.builder()
+
+        LocalDateTime localdatatime = LocalDateTime.now(); // 현재 날짜 및 시간을 가져옵니다.
+
+        User newUser = User.builder()
                 .email(user.get("email"))
                 .password(passwordEncoder.encode(user.get("password")))
                 .roles(Collections.singletonList("ROLE_USER"))
-                .build()).getId();
+                .localDateTime(localdatatime) // 가입 날짜 및 시간 설정
+                .build();
+
+        userRepository.save(newUser);
+
         String response = "POST 요청이 성공적으로 처리되었습니다.";
         return ResponseEntity.ok(response);
     }
+
 
     // 로그인
     @PostMapping("/login")
@@ -73,9 +65,15 @@ public class UserController {
 
     //모든 유저의 로그인 정보 확인
     @GetMapping("/list")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = memberService.getAllUsers(); // Corrected line
-        return ResponseEntity.ok(users);
+    public ResponseEntity<Map<String, Object>> getAllUsersWithCount() {
+        List<User> users = memberService.getAllUsers();
+        List<Object[]> emailCounts = dataService.getEmailsCount();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("users", users);
+        response.put("dataCounts", emailCounts);
+
+        return ResponseEntity.ok(response);
     }
 
     //해당 email유저의 로그인 정보 확인

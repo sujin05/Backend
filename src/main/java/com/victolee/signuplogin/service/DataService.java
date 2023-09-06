@@ -5,6 +5,8 @@ import com.victolee.signuplogin.domain.repository.DataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DataService {
     private final DataRepository dataRepository;
@@ -19,5 +21,8 @@ public class DataService {
     public DataEntity getUserByEmail(String email){
 
         return dataRepository.findByEmail(email).orElse(null);
+    }
+    public List<Object[]> getEmailsCount() {
+        return dataRepository.findEmailsWithCount();
     }
 }

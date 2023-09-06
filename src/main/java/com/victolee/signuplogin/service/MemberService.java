@@ -1,9 +1,8 @@
 package com.victolee.signuplogin.service;
 
-import com.victolee.signuplogin.domain.User;
+import com.victolee.signuplogin.domain.entity.User;
 import com.victolee.signuplogin.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

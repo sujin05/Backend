@@ -6,7 +6,7 @@ spring:
     password: 1234
   mvc:
     cors:
-      allowed-origins: http://172.20.10.7, http://172.20.10.7:3000/main
+      allowed-origins: http://localhost, http://172.20.10.7
       allowed-methods: GET,POST,PUT,DELETE
       allowed-headers: Authorization,Content-Type
       allow-credentials: true

@@ -24,18 +24,18 @@ public class DataEntity {
     private String time;
 
     @Column(length = 100)
-    private String latitude;
+    private Double latitude;
 
     @Column(length = 100)
-    private String hardness;
+    private Double longitude;
 
     @Builder
-    public DataEntity(Long id,String email, String type, String time, String latitude, String hardness) {
+    public DataEntity(Long id,String email, String type, String time, Double latitude, Double longitude) {
         this.id = id;
         this.email = email;
         this.type = type;
         this.time = time;
         this.latitude = latitude;
-        this.hardness = hardness;
+        this.longitude = longitude;
     }
 }

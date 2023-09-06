@@ -1,5 +1,6 @@
-package com.victolee.signuplogin.domain;
+package com.victolee.signuplogin.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.victolee.signuplogin.domain.entity.DataEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,13 +33,21 @@ public class User implements UserDetails {
 
     @Column(length = 100, nullable = false)
     private String password;
+    @Column(columnDefinition = "localdatatime")
+    private LocalDateTime localDateTime;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
 
+    public LocalDateTime getRegistrationDateTime() {
+        return localDateTime;
+    }
 
+    public void setRegistrationDateTime(LocalDateTime registrationDateTime) {
+        this.localDateTime = registrationDateTime;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream()
@@ -49,7 +59,10 @@ public class User implements UserDetails {
     public String getUsername() {
         return email;
     }
-
+    @JsonIgnore
+    public String getPassword() {
+        return this.password;
+    }
     @Override
     public boolean isAccountNonExpired() {
         return true;
