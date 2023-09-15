@@ -119,23 +119,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    //해당 email유저의 데이터 정보 확인
-    @GetMapping("/getData/{email}")
-    public ResponseEntity<Map<String, Object>>getDuplicatedUsersByEmail(@PathVariable String email) {
-        List<DataEntity> duplicatedUsers = dataRepository.findAllByEmail(email);
-
-        Map<String, Object> response = new HashMap<>();
-
-        int userDataCount = duplicatedUsers.size();
-        response.put("DataCounts",userDataCount);
-        response.put("DataInfo",duplicatedUsers);
-
-        if (duplicatedUsers.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(response);
-    }
+   
 
     //해당 email유저의 로그인 정보와 데이터 정보 확인
     @GetMapping("/getUserAllData/{email}" )
